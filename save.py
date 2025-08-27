@@ -21,17 +21,32 @@ st.markdown("---")
 def load_models():
     from ultralytics import YOLO
     import tensorflow as tf
+    from huggingface_hub import hf_hub_download
+    import os
 
     placeholder = st.empty()
     try:
-        placeholder.info("Memuat model YOLOv11m...")
-        detector = YOLO("models/yolo11m.pt")
+        placeholder.info("Memuat model YOLOv11m dari Hugging Face...")
 
-        placeholder.info("Memuat model ResNet50...")
-        classifier = tf.keras.models.load_model("models/best_resnet_momentum_0.3.keras")
+        # Download YOLO
+        yolo_path = hf_hub_download(
+            repo_id="UetsugiLenka/yolreschicken",
+            filename="yolo11m.pt"
+        )
+        detector = YOLO(yolo_path)
 
-        placeholder.success("Model berhasil dimuat.")
+        placeholder.info("Memuat model ResNet50 dari Hugging Face...")
+
+        # Download ResNet
+        resnet_path = hf_hub_download(
+            repo_id="UetsugiLenka/yolreschicken",
+            filename="best_resnet_momentum_0.3.keras"
+        )
+        classifier = tf.keras.models.load_model(resnet_path)
+
+        placeholder.success("Model berhasil dimuat dari Hugging Face!")
         return detector, classifier
+
     except Exception as e:
         placeholder.error(f"Gagal memuat model: {e}")
         return None, None
@@ -192,4 +207,5 @@ with tab2:
 
 # --- FOOTER ---
 st.markdown("---")
+
 st.caption("Sistem Deteksi Kualitas Daging Ayam - Emkayn")
