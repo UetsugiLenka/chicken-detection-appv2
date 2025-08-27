@@ -1,0 +1,8 @@
+streamlit
+ultralytics
+tensorflow
+opencv-python
+numpy
+Pillow
+scikit-learn
+gdown  
